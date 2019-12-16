@@ -169,7 +169,7 @@ The directory structure of a component might look like this:
 Timeline
 ├── Timeline.jsx
 ├── Timeline.module.css
-├── Timeline.story.js
+├── Timeline.stories.js
 ├── Timeline.test.jsx
 └── index.js
 ```
@@ -188,7 +188,7 @@ injecting the main `Timeline.jsx` component with that global state via props.
 Testing the `index.js` connection should be done by the integration test in the
 feature-level test.
 
-NOTE: In this contrived example, the `Timeline.story.js` is actually the file
+NOTE: In this contrived example, the `Timeline.stories.js` is actually the file
 containing documentation. This is due to the preferred use of the documentation
 tool called [Storyboard](https://storybook.js.org/), which organizes
 documentation into "stories".

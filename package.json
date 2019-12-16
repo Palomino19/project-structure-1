@@ -8,6 +8,7 @@
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
         "immer": "^5.0.1",
+        "moment": "^2.24.0",
         "ramda": "^0.26.1",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
@@ -21,7 +22,9 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "test": "react-scripts test"
+        "test": "react-scripts test",
+        "storybook": "start-storybook -p 9009 -s public",
+        "build-storybook": "build-storybook -s public"
     },
     "browserslist": {
         "production": [
@@ -36,6 +39,12 @@
         ]
     },
     "devDependencies": {
+        "@babel/core": "^7.7.5",
+        "@storybook/addon-actions": "^5.2.8",
+        "@storybook/addon-links": "^5.2.8",
+        "@storybook/addons": "^5.2.8",
+        "@storybook/react": "^5.2.8",
+        "babel-loader": "^8.0.6",
         "cypress": "^3.8.0",
         "eslint": "^6.7.2",
         "eslint-config-prettier": "^6.7.0",
