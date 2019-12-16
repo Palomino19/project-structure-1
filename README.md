@@ -78,6 +78,10 @@ The overall structure assumes the following:
             provider](https://react-redux.js.org/api/provider), and render the
             main app router component.
 
+        -   A constants (`constants.js`) file containing global project
+            constants. These constants can be anything from configuration
+            details, route names, and
+
         -   A `store` directory that contains the setup for the main global state
             store, any setup files related to this, and a directory containing any
             middleware-specific setup files.
@@ -189,6 +193,51 @@ containing documentation. This is due to the preferred use of the documentation
 tool called [Storyboard](https://storybook.js.org/), which organizes
 documentation into "stories".
 
+## Managing State and Side Effects
+
+The separation of global and local state is very important. In general, state
+should be kept as local as possible. Making use of state sharing using APIs like
+[React Context](https://reactjs.org/docs/context.html) at a feature-level will
+make managing state as painless as it's able to be.
+
+Other global state management solutions like
+[Unstated](https://github.com/jamiebuilds/unstated) or
+[mobx-state-tree](https://mobx-state-tree.js.org/intro/philosophy) can also be
+used as an alternative to Redux, but should still be able to follow the same
+general structure.
+
+In React specifically, making strong usage of hooks to manage non
+render-specific code dependencies will also greatly help keep a project cohesively
+contained, while still allowing strong abstractions and code sharing.
+
+For Redux specifically, following the [Official Redux Style
+Guide](https://redux.js.org/style-guide/style-guide) will also help keep code
+organized. Side Effects themselves also need be managing separately, as to keep
+reducers pure.
+
+Depending on the complexity of the app, side effects can be contained to actions
+using one or a combination of:
+
+-   [Redux Thunk](https://github.com/reduxjs/redux-thunk) - This allows you to
+    dispatch functions as actions. It's the simplest of solutions, and works
+    perfectly for containing small side-effects.
+-   [Redux Saga](https://github.com/redux-saga/redux-saga) - This is the middle
+    ground, it makes dealing with asynchronous effects straightforward and to
+    the point in managing.
+-   [Redux Observable](https://github.com/redux-observable/redux-observable) -
+    For side effects that are very asynchronous and complex to deal with,
+    isolating actions into event streams that can be manipulated with the full
+    power of [RxJS](https://rxjs.dev/api) works amazingly.
+
+Preserving purity via immutability in a Redux store is great, but it comes at
+the cost of more syntax just to make immutable changes in a reducer. To avoid
+this problem while still keeping the benefits of immutability, it's recommended
+to use the [Immer](https://immerjs.github.io/immer) library.
+
+Another part of Redux is the inefficiencies of selectors and the problems of
+derived data from global state. To avoid this problem, it's recommended to use
+[Reselect](https://github.com/reduxjs/reselect) which memoizes selectors.
+
 ## Testing strategy
 
 On a source-code level, integration and unit tests are mainly concerned with
@@ -230,6 +279,20 @@ be outlined as well. For complicated setups that require a very specific
 environment setup can be offloaded to containerization using Docker,
 but only when it makes sense to do so.
 
+## Styling
+
+Styling is completely subjective to how a team likes/prefers to organize CSS.
+Some prefer CSS-in-JS solutions like [Styled
+Components](https://www.styled-components.com/) or
+[Emotion](https://emotion.sh/), while others prefer [CSS
+Modules](https://github.com/css-modules/css-modules) instead.
+
+Decoupling your styles using CSS modules has one major benefit however: Styles
+are able to be extracted much easier than CSS-in-JS are able. If your team
+decides to rewrite the app using a different framework (like Svelte or Elm), or
+if you need to reuse the same styles in a different project, CSS Modules makes
+this a lot easier than CSS-in-JS does.
+
 ## File naming
 
 File naming should make it obvious what the file/module is doing, and what
@@ -244,6 +307,12 @@ By default, all file names should follow camelCase, the only exception being
 components which follow PascalCase (remember that screens and features are also
 technically components).
 
+When the code entity is obvious by the directory/file structure (such as
+components), then the entity can be omitted. The main benefit of using the code
+entity as part of the file extension is that it allows developers to split a
+singular "entity" into multiple entities as separate files simply be denoting
+the entity in the file extension (all while maintaining the same file "name").
+
 React specific:
 
 -   Low-level and granular components should all have a `.jsx` extension,
@@ -254,42 +323,6 @@ React specific:
     Hooks name should follow the general convention of prefixing the hook with
     "use", making spotting hooks easy. Anything that's not a hook should avoid
     the "use" prefix to avoid confusion. Example: `useFuzzyFilter.jsx`
-
-## Managing State and Side Effects
-
-The separation of global and local state is very important. In general, state
-should be kept as local as possible. Making use of state sharing using APIs like
-[React Context](https://reactjs.org/docs/context.html) at a feature-level will
-make managing state as painless as it's able to be.
-
-Other global state management solutions like
-[Unstated](https://github.com/jamiebuilds/unstated) or
-[mobx-state-tree](https://mobx-state-tree.js.org/intro/philosophy) can also be
-used as an alternative to Redux, but should still be able to follow the same
-general structure.
-
-For Redux specifically, following the [Official Redux Style
-Guide](https://redux.js.org/style-guide/style-guide) will also help keep code
-organized. Side Effects themselves also need be managing separately, as to keep
-reducers pure.
-
-Depending on the complexity of the app, side effects can be contained to actions
-using one or a combination of:
-
--   [Redux Thunk](https://github.com/reduxjs/redux-thunk) - This allows you to
-    dispatch functions as actions. It's the simplest of solutions, and works
-    perfectly for containing small side-effects.
--   [Redux Saga](https://github.com/redux-saga/redux-saga) - This is the middle
-    ground, it makes dealing with asynchronous effects straightforward and to
-    the point in managing.
--   [Redux Observable](https://github.com/redux-observable/redux-observable) -
-    For side effects that are very asynchronous and complex to deal with,
-    isolating actions into event streams that can be manipulated with the full
-    power of [RxJS](https://rxjs.dev/api) works amazingly.
-
-In React specifically, making strong usage of hooks to manage non
-render-specific code dependencies will also greatly help keep a project cohesively
-contained, while still allowing strong abstractions and code sharing.
 
 ## Custom Module Resolution
 
@@ -316,9 +349,19 @@ help rapidly speed up development. These libraries can help take care of generic
 and arbitrarily complex actions. Just be careful to watch the bundle size and
 use tree shaking with these libraries to keep up performance.
 
+## GraphQL
+
+If you're using GraphQL in your project, how you implement queries and mutations
+will completely depend on the use case.
+
+But in general, placing queries in component `index.js` is preferable than
+placing it in the main component source code. This isolates data and injects it
+into the main component when it's rendered, and by decoupling the data it makes
+testing the main component implementation much easier.
+
 ## TypeScript
 
-For large scale projects, using Typescript, or at [Flow](https://flow.org/) is
+For large scale projects, using Typescript (or at [Flow](https://flow.org/)) is
 strongly recommended. TypeErrors are the number 1 JavaScript error, and the main
 culprit of a majority of JavaScript crashes. Avoiding this altogether by using
 type checking will help to bring down the error count and number of user issues.
@@ -330,3 +373,15 @@ turns into `.tsx`.
 Typedef-only files can be organized at the discretion of the developer. A
 majority of the time, it will make sense to treat typedefs as their own "code
 entity", and organize them accordingly.
+
+# Conclusion
+
+The main focus of developers it to build software by developing features. The
+priority of features should then be reflected in a projects structure. The
+benefits of a predictable project structure means faster development times,
+intuitive project file searching, improved onboarding, and heightened code
+comprehension.
+
+# Contributing
+
+Think something should be changed or added? Submit a PR!
