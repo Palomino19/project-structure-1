@@ -13,7 +13,6 @@ The overall structure assumes the following:
 -   A project is being tested (automated)
 -   A project is being documented
 -   A project is using a CI/CD strategy
--   A project is being organized by features
 
 ### The primary goals of the structure are
 
@@ -61,8 +60,7 @@ The overall structure assumes the following:
         environment setup instructions.
 
     -   A `CHANGELOG` file containing a list of notable changes and updates (for
-        reference on what a changelog should look like, [click
-        here](https://keepachangelog.com/)),
+        reference on what a changelog should look like, check out [Keep a Changelog](https://keepachangelog.com/)),
 
 -   The `src` directory should contain:
 
@@ -71,7 +69,8 @@ The overall structure assumes the following:
 
     -   An `app` directory that contains:
 
-        -   The main entry point for the application (the `index.js`).
+        -   The main entry point for the application (the `index.js`, sometimes
+            this entry point needs to be at the root directory however).
 
         -   The very top-level app component (the `App.js`). This component should
             only do 2 things: Wrap the entire app with the global state [store
@@ -160,7 +159,7 @@ Low-level and granular components should have their own directories (keep in
 mind that the app itself, screens and features themselves are technically
 components). The reasoning is so relevant styling (whether styling actually is
 separate might depend, styling might be apart of the component source code in
-some situations), tests, documentation can grouped together with the component
+some situations), tests, and documentation can grouped together with the component
 source code itself.
 
 The directory structure of a component might look like this:
@@ -179,8 +178,7 @@ Timeline
 An important part of this structure is the `index.js` and the `Timeline.jsx`
 being separate files. Technically speaking, these are actually _two_ components,
 but the separation is important: The `Timeline.jsx` should **not** have any\*
-connection to the global state store. It's state should be completely isolated a
-separate.
+connection to the global state store. It's state should be completely isolated.
 
 This makes testing the component in isolation **extremely** easy. The `index.js`
 should then wrap that component with a connection to the global state store,
@@ -190,8 +188,7 @@ feature-level test.
 
 NOTE: In this contrived example, the `Timeline.stories.js` is actually the file
 containing documentation. This is due to the preferred use of the documentation
-tool called [Storyboard](https://storybook.js.org/), which organizes
-documentation into "stories".
+tool called [Storyboard](https://storybook.js.org/), which organizes documentation into "stories".
 
 ## Managing State and Side Effects
 
@@ -220,10 +217,10 @@ using one or a combination of:
 
 -   [Redux Thunk](https://github.com/reduxjs/redux-thunk) - This allows you to
     dispatch functions as actions. It's the simplest of solutions, and works
-    perfectly for containing small side-effects.
+    perfectly for containing small, simple side-effects.
 -   [Redux Saga](https://github.com/redux-saga/redux-saga) - This is the middle
     ground, it makes dealing with asynchronous effects straightforward and to
-    the point in managing.
+    the point in managing by leveraging JavaScript generators.
 -   [Redux Observable](https://github.com/redux-observable/redux-observable) -
     For side effects that are very asynchronous and complex to deal with,
     isolating actions into event streams that can be manipulated with the full
@@ -320,7 +317,7 @@ React specific:
     extension. This makes differentiation between the two very obvious and easy.
 
 -   Hooks do not need to have a `.hook.jsx` extension, just a `.jsx` extension.
-    Hooks name should follow the general convention of prefixing the hook with
+    Hook name should follow the general convention of prefixing the hook with
     "use", making spotting hooks easy. Anything that's not a hook should avoid
     the "use" prefix to avoid confusion. Example: `useFuzzyFilter.jsx`
 
