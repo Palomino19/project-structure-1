@@ -238,6 +238,10 @@ Another part of Redux is the inefficiencies of selectors and the problems of
 derived data from global state. To avoid this problem, it's recommended to use
 [Reselect](https://github.com/reduxjs/reselect) which memoizes selectors.
 
+NOTE: The Angular equivalent of Redux, NgRx has a fantastic
+[diagram](https://ngrx.io/guide/store#diagram) on the overall flow of managed
+side effects, actions, reducers, the store, and selectors.
+
 ## Testing strategy
 
 On a source-code level, integration and unit tests are mainly concerned with
@@ -279,7 +283,7 @@ be outlined as well. For complicated setups that require a very specific
 environment setup can be offloaded to containerization using Docker,
 but only when it makes sense to do so.
 
-## Styling
+## Styling (CSS)
 
 Styling is completely subjective to how a team likes/prefers to organize CSS.
 Some prefer CSS-in-JS solutions like [Styled
@@ -292,6 +296,18 @@ are able to be extracted much easier than CSS-in-JS are able. If your team
 decides to rewrite the app using a different framework (like Svelte or Elm), or
 if you need to reuse the same styles in a different project, CSS Modules makes
 this a lot easier than CSS-in-JS does.
+
+When combining CSS Modules with React, the syntax of the className prop can be
+fairly cumbersome. It can also be slightly dangerous when mistyping a css class
+name in a component, and your styling failing silently. Using a babel plugin
+like
+[babel-plugin-react-css-modules](https://github.com/gajus/babel-plugin-react-css-modules)
+can clean up this up greatly, and will fail your bundler, letting you know
+there's an issue.
+
+NOTE: When snapshot testing, the Base64-encoded generated css module name can cause snapshots to be mismatched. To deal with this, use
+[identity-obj-proxy](https://github.com/keyz/identity-obj-proxy) in your testing
+setup.
 
 ## File naming
 
