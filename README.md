@@ -10,120 +10,120 @@ various parts of a project.
 
 The overall structure assumes the following:
 
--   A project is being tested (automated)
--   A project is being documented
--   A project is using a CI/CD strategy
+- A project is being tested (automated)
+- A project is being documented
+- A project is using a CI/CD strategy
 
 ### The primary goals of the structure are
 
--   **1**) Initial comprehension of a project for a new developer should be
-    near painless. The structure of features should be intuitive, and
-    finding anything in even a larger codebase should be very easy.
+- **1**) Initial comprehension of a project for a new developer should be
+  near painless. The structure of features should be intuitive, and
+  finding anything in even a larger codebase should be very easy.
 
--   **2**) A project should be organized by features and what these feature
-    _do_, instead of being organized by grouping together similar "types" of
-    code structures (there are exceptions to this rule where grouping by "type"
-    makes sense).
+- **2**) A project should be organized by features and what these feature
+  _do_, instead of being organized by grouping together similar "types" of
+  code structures (there are exceptions to this rule where grouping by "type"
+  makes sense).
 
--   **3**) Provide a clear maintainability and testing strategy (even if
-    ultimately, testing is minimal) by having clear separation between the
-    following:
+- **3**) Provide a clear maintainability and testing strategy (even if
+  ultimately, testing is minimal) by having clear separation between the
+  following:
 
-    -   Global State
-    -   Local State
-    -   Side Effects
+  - Global State
+  - Local State
+  - Side Effects
 
--   **4**) Provide a clear documentation strategy (even if ultimately,
-    documentation is minimal). The benefit of organizing a codebase by features
-    is that each feature and any technical decisions can be documented alongside
-    a features related code.
+- **4**) Provide a clear documentation strategy (even if ultimately,
+  documentation is minimal). The benefit of organizing a codebase by features
+  is that each feature and any technical decisions can be documented alongside
+  a features related code.
 
--   **5**) Differentiate between two distinct types of features: user-facing
-    features (visual features), and non user-facing features.
+- **5**) Differentiate between two distinct types of features: user-facing
+  features (visual features), and non user-facing features.
 
--   **6**) Project files should be easy to find and differentiate between (it
-    should be obvious _what_ a file is **and** _what_ it does).
+- **6**) Project files should be easy to find and differentiate between (it
+  should be obvious _what_ a file is **and** _what_ it does).
 
 ## The Structure
 
--   The root directory of a project should contain the following:
+- The root directory of a project should contain the following:
 
-    -   The main `src` directory of the project,
+  - The main `src` directory of the project,
 
-    -   Any auxiliary directories (for example, the E2E testing framework cypress
-        uses a root directory to store tests and related configuration/setup).
+  - Any auxiliary directories (for example, the E2E testing framework cypress
+    uses a root directory to store tests and related configuration/setup).
 
-    -   Any project-level configurations related to static analysis tools, CI/CI,
-        testing, or related (this includes the `package.json`).
+  - Any project-level configurations related to static analysis tools, CI/CI,
+    testing, or related (this includes the `package.json`).
 
-    -   A `README.md` file containing general project information and development
-        environment setup instructions.
+  - A `README.md` file containing general project information and development
+    environment setup instructions.
 
-    -   A `CHANGELOG` file containing a list of notable changes and updates (for
-        reference on what a changelog should look like, check out [Keep a Changelog](https://keepachangelog.com/)),
+  - A `CHANGELOG` file containing a list of notable changes and updates (for
+    reference on what a changelog should look like, check out [Keep a Changelog](https://keepachangelog.com/)),
 
--   The `src` directory should contain:
+- The `src` directory should contain:
 
-    -   An `assets` directory containing any relevant project assets (e.g.: fonts,
-        images, vector graphics, etc).
+  - An `assets` directory containing any relevant project assets (e.g.: fonts,
+    images, vector graphics, etc).
 
-    -   An `app` directory that contains:
+  - An `app` directory that contains:
 
-        -   The main entry point for the application (the `index.js`, sometimes
-            this entry point needs to be at the root directory however).
+    - The main entry point for the application (the `index.js`, sometimes
+      this entry point needs to be at the root directory however).
 
-        -   The very top-level app component (the `App.js`). This component should
-            only do 2 things: Wrap the entire app with the global state [store
-            provider](https://react-redux.js.org/api/provider), and render the
-            main app router component.
+    - The very top-level app component (the `App.js`). This component should
+      only do 2 things: Wrap the entire app with the global state [store
+      provider](https://react-redux.js.org/api/provider), and render the
+      main app router component.
 
-        -   A constants (`constants.js`) file containing global project
-            constants. These constants can be anything from configuration
-            details, route names, and
+    - A constants (`constants.js`) file containing global project
+      constants. These constants can be anything including configuration
+      details and route names.
 
-        -   A `store` directory that contains the setup for the main global state
-            store, any setup files related to this, and a directory containing any
-            middleware-specific setup files.
+    - A `store` directory that contains the setup for the main global state
+      store, any setup files related to this, and a directory containing any
+      middleware-specific setup files.
 
-    -   A `shared` directory for granular artifacts that are relevant to the
-        entire project. Files should be grouped by type (e.g.: components,
-        hooks). This is where very generic components like `Button` and `Card`
-        would be.
+  - A `shared` directory for granular artifacts that are relevant to the
+    entire project. Files should be grouped by type (e.g.: components,
+    hooks). This is where very generic components like `Button` and `Card`
+    would be.
 
-    -   A `utils` directory that contains any utility modules. If several
-        utilities are related, (for example, having multiple `testing` utils)
-        are related, they should be placed in an organizational directory to
-        keep them grouped.
+  - A `utils` directory that contains any utility modules. If several
+    utilities are related, (for example, having multiple `testing` utils)
+    are related, they should be placed in an organizational directory to
+    keep them grouped.
 
-    -   A `screens` directory that should contain:
+  - A `screens` directory that should contain:
 
-        -   Top level screen component directories (more on this below).
+    - Top level screen component directories (more on this below).
 
-        -   A top level `AppRouter` component that handles the routing setup of
-            switching between the different top-level screens. (This component
-            _only_ cares about the top level of screens. If screens have
-            sub-screens, the top-level of screens should be concerned with the
-            rendering of sub-level screens, not the main app router).
+    - A top level `AppRouter` component that handles the routing setup of
+      switching between the different top-level screens. (This component
+      _only_ cares about the top level of screens. If screens have
+      sub-screens, the top-level of screens should be concerned with the
+      rendering of sub-level screens, not the main app router).
 
-    -   Directories that contain non user-facing features. Examples of these
-        types of features might be `authentication` or `caching`. These
-        directories should be organized the same as feature directories (more on
-        feature directories below), with the exception that similar code
-        entities should be grouped, just like the `shared` directory (an example
-        of this would be grouping `components` together in a directory).
+  - Directories that contain non user-facing features. Examples of these
+    types of features might be `authentication` or `caching`. These
+    directories should be organized the same as feature directories (more on
+    feature directories below), with the exception that similar code
+    entities should be grouped, just like the `shared` directory (an example
+    of this would be grouping `components` together in a directory).
 
 ### Screen directories
 
 Screen directories should only contain 3 things:
 
--   Sub-screen directories (these have the same rules that apply to top-level
-    screen directories).
+- Sub-screen directories (these have the same rules that apply to top-level
+  screen directories).
 
--   Feature directories.
+- Feature directories.
 
--   A component for rendering this screen (this component is only concerned with
-    rendering/routing it's related features or sub-screens, mixing both should
-    be avoided if possible).
+- A component for rendering this screen (this component is only concerned with
+  rendering/routing it's related features or sub-screens, mixing both should
+  be avoided if possible).
 
 ### Feature directories
 
@@ -132,22 +132,22 @@ complexity. If possible, complex features should be broken down into
 sub-features. The organization of a feature directory should be the most
 flexible, but in general the following guidelines should be followed:
 
--   Common code entities should be grouped together if there are multiple entities
-    (for example, if there is only 1 redux store action, then it doesn't need
-    it's own directory. If there are more than one, then they should be grouped
-    together). The exception to this rule are components, unless a particular
-    feature has an unusually large amount of related components.
+- Common code entities should be grouped together if there are multiple entities
+  (for example, if there is only 1 redux store action, then it doesn't need
+  it's own directory. If there are more than one, then they should be grouped
+  together). The exception to this rule are components, unless a particular
+  feature has an unusually large amount of related components.
 
--   As state above, components don't need to be grouped, except each component
-    having it's own directory (more on component directories below).
+- As state above, components don't need to be grouped, except each component
+  having it's own directory (more on component directories below).
 
--   There should be a feature-specific component that gets rendered by the
-    parent screen (or feature) component.
+- There should be a feature-specific component that gets rendered by the
+  parent screen (or feature) component.
 
--   Complex features that cannot be quickly comprehended just by looking at the
-    source code should also have a `README.md` to explain any complex behaviors.
-    This doc might also convey explanations as to why certain things are the way
-    they are, and explain technical decisions.
+- Complex features that cannot be quickly comprehended just by looking at the
+  source code should also have a `README.md` to explain any complex behaviors.
+  This doc might also convey explanations as to why certain things are the way
+  they are, and explain technical decisions.
 
 In cases where features are so simple, they can be abstracted to be a
 screen-level feature, it is preferable to do so. The line between screens and
@@ -215,16 +215,16 @@ reducers pure.
 Depending on the complexity of the app, side effects can be contained to actions
 using one or a combination of:
 
--   [Redux Thunk](https://github.com/reduxjs/redux-thunk) - This allows you to
-    dispatch functions as actions. It's the simplest of solutions, and works
-    perfectly for containing small, simple side-effects.
--   [Redux Saga](https://github.com/redux-saga/redux-saga) - This is the middle
-    ground, it makes dealing with asynchronous effects straightforward and to
-    the point in managing by leveraging JavaScript generators.
--   [Redux Observable](https://github.com/redux-observable/redux-observable) -
-    For side effects that are very asynchronous and complex to deal with,
-    isolating actions into event streams that can be manipulated with the full
-    power of [RxJS](https://rxjs.dev/api) works amazingly.
+- [Redux Thunk](https://github.com/reduxjs/redux-thunk) - This allows you to
+  dispatch functions as actions. It's the simplest of solutions, and works
+  perfectly for containing small, simple side-effects.
+- [Redux Saga](https://github.com/redux-saga/redux-saga) - This is the middle
+  ground, it makes dealing with asynchronous effects straightforward and to
+  the point in managing by leveraging JavaScript generators.
+- [Redux Observable](https://github.com/redux-observable/redux-observable) -
+  For side effects that are very asynchronous and complex to deal with,
+  isolating actions into event streams that can be manipulated with the full
+  power of [RxJS](https://rxjs.dev/api) works amazingly.
 
 Preserving purity via immutability in a Redux store is great, but it comes at
 the cost of more syntax just to make immutable changes in a reducer. To avoid
@@ -260,9 +260,9 @@ integrating them into the projects CI/CD pipeline is another important part of
 testing. The following tools can also making automatic running of these tools a
 lot easier:
 
--   [Husky](https://github.com/typicode/husky)
--   [Lint-Staged](https://github.com/okonet/lint-staged)
--   [Npm-Run-All](https://github.com/mysticatea/npm-run-all)
+- [Husky](https://github.com/typicode/husky)
+- [Lint-Staged](https://github.com/okonet/lint-staged)
+- [Npm-Run-All](https://github.com/mysticatea/npm-run-all)
 
 NOTE: Integration tests may also be written alongside E2E tests in some
 situations.
@@ -328,14 +328,14 @@ the entity in the file extension (all while maintaining the same file "name").
 
 React specific:
 
--   Low-level and granular components should all have a `.jsx` extension,
-    while top-level, screen, and feature components should only have the `.js`
-    extension. This makes differentiation between the two very obvious and easy.
+- Low-level and granular components should all have a `.jsx` extension,
+  while top-level, screen, and feature components should only have the `.js`
+  extension. This makes differentiation between the two very obvious and easy.
 
--   Hooks do not need to have a `.hook.jsx` extension, just a `.jsx` extension.
-    Hook name should follow the general convention of prefixing the hook with
-    "use", making spotting hooks easy. Anything that's not a hook should avoid
-    the "use" prefix to avoid confusion. Example: `useFuzzyFilter.jsx`
+- Hooks do not need to have a `.hook.jsx` extension, just a `.jsx` extension.
+  Hook name should follow the general convention of prefixing the hook with
+  "use", making spotting hooks easy. Anything that's not a hook should avoid
+  the "use" prefix to avoid confusion. Example: `useFuzzyFilter.jsx`
 
 ## Custom Module Resolution
 
